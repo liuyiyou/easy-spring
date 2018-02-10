@@ -16,7 +16,11 @@
 
 package org.springframework.beans.factory.config;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -29,9 +33,17 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class PropertiesFactoryBeanTests extends TestCase {
 
+	public void testGetResourceAsStream(){
+		InputStream resourceAsStream = this.getClass().getResourceAsStream("/");
+
+	}
+
+	//之前一直通不过是因为，resource的路径是org.springframework/beans 而不是 org/springframework/beans
 	public void testWithPropertiesFile() throws IOException {
 		PropertiesFactoryBean pfb = new PropertiesFactoryBean();
-		pfb.setLocation(new ClassPathResource("/org/springframework/beans/factory/config/test.properties"));
+//		ClassPathResource classPathResource = new ClassPathResource("/org/springframework/beans/factory/config/test.properties");
+		ClassPathResource classPathResource = new ClassPathResource("test.properties", getClass());
+		pfb.setLocation(classPathResource);
 		pfb.afterPropertiesSet();
 		Properties props = (Properties) pfb.getObject();
 		assertEquals("value1", props.getProperty("key1"));
