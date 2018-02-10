@@ -49,8 +49,10 @@ public interface XmlBeanDefinitionParser {
 	 * @param resource descriptor of the original XML resource
 	 * (useful for displaying parse errors)
 	 * @throws BeansException in case of parsing errors
+	 *
+	 * @update 1.1.1 从返回void到返回int
 	 */
-	void registerBeanDefinitions(BeanDefinitionRegistry beanFactory, ClassLoader beanClassLoader,
+	int registerBeanDefinitions(BeanDefinitionRegistry beanFactory, ClassLoader beanClassLoader,
                                  Document doc, Resource resource) throws BeansException;
 
 }

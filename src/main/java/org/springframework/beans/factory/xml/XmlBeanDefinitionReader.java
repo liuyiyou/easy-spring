@@ -109,7 +109,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @param resource the resource descriptor for the XML file
 	 * @throws BeansException in case of loading or parsing errors
 	 */
-	public void loadBeanDefinitions(Resource resource) throws BeansException {
+	public int loadBeanDefinitions(Resource resource) throws BeansException {
 		if (resource == null) {
 			throw new BeanDefinitionStoreException("Resource cannot be null: expected an XML file");
 		}
@@ -124,7 +124,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			docBuilder.setEntityResolver(this.entityResolver != null ? this.entityResolver : new BeansDtdResolver());
 			is = resource.getInputStream();
 			Document doc = docBuilder.parse(is);
-			registerBeanDefinitions(doc, resource);
+			return registerBeanDefinitions(doc, resource);
 		}
 		catch (ParserConfigurationException ex) {
 			throw new BeanDefinitionStoreException("Parser configuration exception parsing XML from " + resource, ex);
@@ -156,9 +156,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @param doc the DOM document
 	 * @throws BeansException in case of parsing errors
 	 */
-	public void registerBeanDefinitions(Document doc, Resource resource) throws BeansException {
+	public int registerBeanDefinitions(Document doc, Resource resource) throws BeansException {
 		XmlBeanDefinitionParser parser = (XmlBeanDefinitionParser) BeanUtils.instantiateClass(this.parserClass);
-		parser.registerBeanDefinitions(getBeanFactory(), getBeanClassLoader(), doc, resource);
+		return parser.registerBeanDefinitions(getBeanFactory(), getBeanClassLoader(), doc, resource);
 	}
 
 

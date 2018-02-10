@@ -61,4 +61,29 @@ public interface BeanDefinition {
      */
     String getResourceDescription();
 
+
+
+    //1.1版本后
+//    /**
+//     * Return the class defined for the bean, if any.
+//     */
+//    Class getBeanClass();
+//
+//    /**
+//     * Return whether this bean is "abstract", i.e. not meant to be instantiated.
+//     */
+//    boolean isAbstract();
+//
+//    /**
+//     * Return whether this a <b>Singleton</b>, with a single, shared instance
+//     * returned on all calls.
+//     */
+//    boolean isSingleton();
+//
+//    /**
+//     * Return whether this bean should be lazily initialized, i.e. not
+//     * eagerly instantiated on startup. Only applicable to a singleton bean.
+//     */
+//    boolean isLazyInit();
+
 }
