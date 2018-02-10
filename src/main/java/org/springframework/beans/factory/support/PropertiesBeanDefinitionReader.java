@@ -136,6 +136,7 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
 	 * @throws BeansException in case of loading or parsing errors
 	 * @see #loadBeanDefinitions(Resource, String)
 	 */
+	@Override
 	public int loadBeanDefinitions(Resource resource) {
 		return loadBeanDefinitions(resource, null);
 	}

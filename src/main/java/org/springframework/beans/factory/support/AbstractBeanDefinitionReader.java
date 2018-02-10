@@ -16,6 +16,8 @@
 
 package org.springframework.beans.factory.support;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.config.BeanDefinitionReader;
 
 /**
@@ -30,6 +32,9 @@ import org.springframework.beans.factory.config.BeanDefinitionReader;
  */
 public abstract class AbstractBeanDefinitionReader implements BeanDefinitionReader {
 
+
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private BeanDefinitionRegistry beanFactory;
 
     private ClassLoader beanClassLoader = Thread.currentThread().getContextClassLoader();
@@ -40,8 +45,9 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 
     /**
      * Return the BeanFactory that this reader works on.
-     * 返回读取的BeanFactory
+     * 返回读取BeanDefinition的BeanFactory
      */
+    @Override
     public BeanDefinitionRegistry getBeanFactory() {
         return beanFactory;
     }
@@ -62,6 +68,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     /**
      * Return the class loader for bean classes.
      */
+    @Override
     public ClassLoader getBeanClassLoader() {
         return beanClassLoader;
     }

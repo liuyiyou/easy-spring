@@ -16,6 +16,7 @@
 
 package org.springframework.beans.factory.xml;
 
+import org.springframework.beans.factory.config.BeanDefinitionReader;
 import org.w3c.dom.Document;
 
 import org.springframework.beans.BeansException;
@@ -50,7 +51,7 @@ public interface XmlBeanDefinitionParser {
 	 * (useful for displaying parse errors)
 	 * @throws BeansException in case of parsing errors
 	 *
-	 * @update 1.1.1 从返回void到返回int
+	 * @update 1.1.1 从返回void到返回int，且方法参数有改变
 	 */
 	int registerBeanDefinitions(BeanDefinitionRegistry beanFactory, ClassLoader beanClassLoader,
                                  Document doc, Resource resource) throws BeansException;

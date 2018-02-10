@@ -65,6 +65,12 @@ import java.util.TreeSet;
  * findMatchingBeans, used for autowiring by type. Note that this class
  * does <i>not</i> implement bean definition registry capabilities
  * (DefaultListableBeanFactory does).
+ * <p>
+ * 抽象BeanFactory超类，它实现了默认的bean创建。 实现AutowireCapableBeanFactory接口。
+ * <p>
+ * 提供bean创建，初始化和接线，支持自动装配和构造器解析。 处理运行时bean引用，托管集合和bean销毁。
+ * <p>
+ * 子类实现的主要模板方法是findMatchingBeans，用于按类型自动装配。 请注意，这个类不实现bean定义注册表功能（DefaultListableBeanFactory）。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -158,7 +164,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         if (logger.isDebugEnabled()) {
             logger.debug("Creating instance of bean '" + beanName + "' with merged definition [" + mergedBeanDefinition + "]");
         }
-
         if (mergedBeanDefinition.getDependsOn() != null) {
             for (int i = 0; i < mergedBeanDefinition.getDependsOn().length; i++) {
                 // guarantee initialization of beans that the current one depends on

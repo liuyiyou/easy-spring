@@ -30,7 +30,7 @@ import java.lang.reflect.Constructor;
  * <p>The autowire constants match the ones defined in the
  * AutowireCapableBeanFactory interface, adding AUTOWIRE_NO.
  * <p>
- * Root bean定义有一个类加上可选的构造函数参数值和属性值。 这是最常见的bean定义类型。
+ * RootBeanDefinition有一个类加上可选的构造函数参数值和属性值。 这是最常见的bean定义类型。
  * <p>
  * 自动装配常数与AutowireCapableBeanFactory接口中定义的自动装配常数相匹配，并添加AUTOWIRE_NO。
  *
@@ -41,23 +41,32 @@ import java.lang.reflect.Constructor;
  */
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
+    //不自动装配
     public static final int AUTOWIRE_NO = 0;
 
+    //通过名字装配
     public static final int AUTOWIRE_BY_NAME = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;
 
+    //通过类型装配
     public static final int AUTOWIRE_BY_TYPE = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
 
+    //通过构造方法装配
     public static final int AUTOWIRE_CONSTRUCTOR = AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR;
 
+    //
     public static final int AUTOWIRE_AUTODETECT = AutowireCapableBeanFactory.AUTOWIRE_AUTODETECT;
 
 
+    //不进行依赖检查
     public static final int DEPENDENCY_CHECK_NONE = 0;
 
+    //通过对象检查
     public static final int DEPENDENCY_CHECK_OBJECTS = 1;
 
+    //普通检查
     public static final int DEPENDENCY_CHECK_SIMPLE = 2;
 
+    //全部检查
     public static final int DEPENDENCY_CHECK_ALL = 3;
 
 
@@ -100,11 +109,14 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
     /**
      * Create a new RootBeanDefinition for a singleton,
      * using the given autowire mode.
+     * <p>
+     * 为单例bean创建一个新的RootBeanDefinition，使用给定的装配模式
      *
      * @param beanClass       the class of the bean to instantiate
      * @param autowireMode    by name or type, using the constants in this interface
      * @param dependencyCheck whether to perform a dependency check for objects
      *                        (not applicable to autowiring a constructor, thus ignored there)
+     *                        是否执行对象的依赖性检查
      */
     public RootBeanDefinition(Class beanClass, int autowireMode, boolean dependencyCheck) {
         super(null);
@@ -118,6 +130,8 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
     /**
      * Create a new RootBeanDefinition for a singleton,
      * providing property values.
+     * <p></p>
+     * 通过提供PropertyValues为单例bean创建一个新的RootBeanDefinition，使用给定的装配模式
      *
      * @param beanClass the class of the bean to instantiate
      * @param pvs       the property values to apply
@@ -128,6 +142,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
     }
 
     /**
+     * 通过提供PropertyValues和是否为单例 bean创建一个新的RootBeanDefinition，
      * Create a new RootBeanDefinition with the given singleton status,
      * providing property values.
      *
@@ -200,6 +215,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
     }
 
     /**
+     * 返回包装的bean的类。
      * Returns the class of the wrapped bean.
      *
      * @throws IllegalStateException if the bean definition does not carry
@@ -214,6 +230,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 
     /**
      * Returns the class name of the wrapped bean.
+     * 返回包装的bean的类名。
      */
     public final String getBeanClassName() {
         if (this.beanClass instanceof Class) {
@@ -258,9 +275,6 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public int getResolvedAutowireMode() {
         if (this.autowireMode == AUTOWIRE_AUTODETECT) {
-            // Work out whether to apply setter autowiring or constructor autowiring.
-            // If it has a no-arg constructor it's deemed to be setter autowiring,
-            // otherwise we'll try constructor autowiring.
             Constructor[] constructors = getBeanClass().getConstructors();
             for (int i = 0; i < constructors.length; i++) {
                 if (constructors[i].getParameterTypes().length == 0) {

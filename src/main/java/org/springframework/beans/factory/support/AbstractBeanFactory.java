@@ -532,6 +532,9 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
 
 	/**
 	 * Return a RootBeanDefinition, even by traversing parent if the parameter is a child definition.
+     * <p>
+     *     返回一个RootBeanDefinition，即使参数是一个子类定义，也可以遍历父类。
+     * </p>
 	 * @return a merged RootBeanDefinition with overridden properties
 	 */
 	protected RootBeanDefinition getMergedBeanDefinition(String beanName, BeanDefinition bd) {
