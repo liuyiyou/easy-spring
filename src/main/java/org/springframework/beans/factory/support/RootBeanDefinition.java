@@ -70,9 +70,6 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
     public static final int DEPENDENCY_CHECK_ALL = 3;
 
 
-    //实例化的bean
-    private Object beanClass;
-
     //实例化bean的构造函数参数值
     private ConstructorArgumentValues constructorArgumentValues;
 
@@ -91,6 +88,10 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
     private String destroyMethodName;
 
 
+    public RootBeanDefinition() {
+        super();
+    }
+
     /**
      * Create a new RootBeanDefinition for a singleton,
      * 为单例bean创建一个新的RootBeanDefinition
@@ -102,7 +103,8 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public RootBeanDefinition(Class beanClass, int autowireMode) {
         super(null);
-        this.beanClass = beanClass;
+//        this.beanClass = beanClass;
+        setBeanClass(beanClass);
         setAutowireMode(autowireMode);
     }
 
@@ -120,7 +122,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public RootBeanDefinition(Class beanClass, int autowireMode, boolean dependencyCheck) {
         super(null);
-        this.beanClass = beanClass;
+        setBeanClass(beanClass);
         setAutowireMode(autowireMode);
         if (dependencyCheck && getResolvedAutowireMode() != AUTOWIRE_CONSTRUCTOR) {
             setDependencyCheck(RootBeanDefinition.DEPENDENCY_CHECK_OBJECTS);
@@ -138,7 +140,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public RootBeanDefinition(Class beanClass, MutablePropertyValues pvs) {
         super(pvs);
-        this.beanClass = beanClass;
+        setBeanClass(beanClass);
     }
 
     /**
@@ -152,7 +154,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public RootBeanDefinition(Class beanClass, MutablePropertyValues pvs, boolean singleton) {
         super(pvs);
-        this.beanClass = beanClass;
+        setBeanClass(beanClass);
         setSingleton(singleton);
     }
 
@@ -166,7 +168,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public RootBeanDefinition(Class beanClass, ConstructorArgumentValues cargs, MutablePropertyValues pvs) {
         super(pvs);
-        this.beanClass = beanClass;
+        setBeanClass(beanClass);
         this.constructorArgumentValues = cargs;
     }
 
@@ -181,7 +183,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public RootBeanDefinition(String beanClassName, ConstructorArgumentValues cargs, MutablePropertyValues pvs) {
         super(pvs);
-        this.beanClass = beanClassName;
+        setBeanClassName(beanClassName);
         this.constructorArgumentValues = cargs;
     }
 
@@ -190,7 +192,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
      */
     public RootBeanDefinition(RootBeanDefinition other) {
         super(new MutablePropertyValues(other.getPropertyValues()));
-        this.beanClass = other.beanClass;
+        setBeanClass(other.getBeanClass());
         this.constructorArgumentValues = other.constructorArgumentValues;
         setSingleton(other.isSingleton());
         setLazyInit(other.isLazyInit());
@@ -214,31 +216,6 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
         return (constructorArgumentValues != null && !constructorArgumentValues.isEmpty());
     }
 
-    /**
-     * 返回包装的bean的类。
-     * Returns the class of the wrapped bean.
-     *
-     * @throws IllegalStateException if the bean definition does not carry
-     *                               a resolved bean class
-     */
-    public final Class getBeanClass() throws IllegalStateException {
-        if (!(this.beanClass instanceof Class)) {
-            throw new IllegalStateException("Bean definition does not carry a resolved bean class");
-        }
-        return (Class) this.beanClass;
-    }
-
-    /**
-     * Returns the class name of the wrapped bean.
-     * 返回包装的bean的类名。
-     */
-    public final String getBeanClassName() {
-        if (this.beanClass instanceof Class) {
-            return ((Class) this.beanClass).getName();
-        } else {
-            return (String) this.beanClass;
-        }
-    }
 
     /**
      * Set the autowire code. This determines whether any automagical detection
@@ -356,12 +333,13 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
         return this.destroyMethodName;
     }
 
+    @Override
     public void validate() throws BeanDefinitionValidationException {
         super.validate();
-        if (this.beanClass == null) {
+        if (getBeanClass() == null) {
             throw new BeanDefinitionValidationException("beanClass must be set in RootBeanDefinition");
         }
-        if (this.beanClass instanceof Class) {
+        if (getBeanClass() instanceof Class) {
             if (FactoryBean.class.isAssignableFrom(getBeanClass()) && !isSingleton()) {
                 throw new BeanDefinitionValidationException("FactoryBean must be defined as singleton - " +
                         "FactoryBeans themselves are not allowed to be prototypes");
