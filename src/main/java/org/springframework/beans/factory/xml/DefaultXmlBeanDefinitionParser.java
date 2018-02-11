@@ -24,7 +24,7 @@ import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.support.ChildBeanDefinition;
 import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.support.ManagedMap;
@@ -116,9 +116,10 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private BeanDefinitionRegistry beanFactory;
-
-    private ClassLoader beanClassLoader;
+    //    private BeanDefinitionRegistry beanFactory;
+//
+//    private ClassLoader beanClassLoader;
+    private BeanDefinitionReader beanDefinitionReader;
 
     private Resource resource;
 
@@ -131,10 +132,11 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
 
     //1.1.1 返回int
     @Override
-    public int registerBeanDefinitions(BeanDefinitionRegistry beanFactory, ClassLoader beanClassLoader,
-                                        Document doc, Resource resource) {
-        this.beanFactory = beanFactory;
-        this.beanClassLoader = beanClassLoader;
+    public int registerBeanDefinitions(BeanDefinitionReader beanDefinitionReader,
+                                       Document doc, Resource resource) {
+//        this.beanFactory = beanFactory;
+//        this.beanClassLoader = beanClassLoader;
+        this.beanDefinitionReader = beanDefinitionReader;
         this.resource = resource;
 
         logger.debug("Loading bean definitions");
@@ -160,12 +162,9 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
         return beanDefinitionCounter;
     }
 
-    protected BeanDefinitionRegistry getBeanFactory() {
-        return beanFactory;
-    }
 
-    protected ClassLoader getBeanClassLoader() {
-        return beanClassLoader;
+    public BeanDefinitionReader getBeanDefinitionReader() {
+        return beanDefinitionReader;
     }
 
     protected String getDefaultLazyInit() {
@@ -217,9 +216,9 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
 
         logger.debug("Registering bean definition with id '" + id + "'");
         //将BeanDefinition注册到BeanFactory
-        this.beanFactory.registerBeanDefinition(id, beanDefinition);
+        this.beanDefinitionReader.getBeanFactory().registerBeanDefinition(id, beanDefinition);
         for (Iterator it = aliases.iterator(); it.hasNext(); ) {
-            this.beanFactory.registerAlias(id, (String) it.next());
+            this.beanDefinitionReader.getBeanFactory().registerAlias(id, (String) it.next());
         }
     }
 
@@ -253,8 +252,8 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
                 //得到构造函数参数值
                 ConstructorArgumentValues cargs = getConstructorArgSubElements(beanName, ele);
                 RootBeanDefinition rbd = null;
-                if (this.beanClassLoader != null) {
-                    Class clazz = Class.forName(className, true, this.beanClassLoader);
+                if (this.getBeanDefinitionReader().getBeanFactory() != null) {
+                    Class clazz = Class.forName(className, true, this.getBeanDefinitionReader().getBeanClassLoader());
                     rbd = new RootBeanDefinition(clazz, cargs, pvs);
                 } else {
                     rbd = new RootBeanDefinition(className, cargs, pvs);

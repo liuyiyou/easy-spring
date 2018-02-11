@@ -38,6 +38,30 @@ public class ConstructorArgumentValues {
 
 	private Set genericArgumentValues = new HashSet();
 
+
+	/**
+	 * Create new ConstructorArgumentValues.
+	 */
+	public ConstructorArgumentValues() {
+	}
+
+	/**
+	 * Deep copy constructor.
+	 */
+	public ConstructorArgumentValues(ConstructorArgumentValues other) {
+		addArgumentValues(other);
+	}
+
+
+	/**
+	 * Copy all given argument values into this object.
+	 */
+	public void addArgumentValues(ConstructorArgumentValues other) {
+		if (other != null) {
+			this.genericArgumentValues.addAll(other.genericArgumentValues);
+			this.indexedArgumentValues.putAll(other.indexedArgumentValues);
+		}
+	}
 	/**
 	 * Add argument value for the given index in the constructor argument list.
 	 * @param index the index in the constructor argument list

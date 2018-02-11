@@ -30,7 +30,8 @@ import org.springframework.beans.MutablePropertyValues;
  * BeanDefinition描述了一个bean实例，该实例具有属性值，构造函数参数值以及由具体实现提供的更多信息。
  * <p>
  * 这只是一个最小的接口：主要目的是允许BeanFactoryPostProcessors（如PropertyPlaceholderConfigurer）访问和修改属性值。
- *<p>
+ * <p>
+ *
  * @author Juergen Hoeller
  * @see ConfigurableBeanFactory#getBeanDefinition
  * @see BeanFactoryPostProcessor
@@ -40,6 +41,31 @@ import org.springframework.beans.MutablePropertyValues;
  * @since 19.03.2004
  */
 public interface BeanDefinition {
+
+
+    /**
+     * Return the class defined for the bean, if any.
+     */
+    Class getBeanClass();
+
+    /**
+     * Return whether this bean is "abstract", i.e. not meant to be instantiated.
+     */
+    boolean isAbstract();
+
+    /**
+     * Return whether this a <b>Singleton</b>, with a single, shared instance
+     * returned on all calls.
+     */
+    boolean isSingleton();
+
+    /**
+     * Return whether this bean should be lazily initialized, i.e. not
+     * eagerly instantiated on startup. Only applicable to a singleton bean.
+     */
+    boolean isLazyInit();
+
+    //上面的是1.1新加的
 
     /**
      * Return the PropertyValues to be applied to a new instance of the bean.
@@ -61,29 +87,5 @@ public interface BeanDefinition {
      */
     String getResourceDescription();
 
-
-
-    //1.1版本后
-//    /**
-//     * Return the class defined for the bean, if any.
-//     */
-//    Class getBeanClass();
-//
-//    /**
-//     * Return whether this bean is "abstract", i.e. not meant to be instantiated.
-//     */
-//    boolean isAbstract();
-//
-//    /**
-//     * Return whether this a <b>Singleton</b>, with a single, shared instance
-//     * returned on all calls.
-//     */
-//    boolean isSingleton();
-//
-//    /**
-//     * Return whether this bean should be lazily initialized, i.e. not
-//     * eagerly instantiated on startup. Only applicable to a singleton bean.
-//     */
-//    boolean isLazyInit();
 
 }

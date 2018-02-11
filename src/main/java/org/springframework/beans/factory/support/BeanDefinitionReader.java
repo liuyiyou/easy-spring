@@ -1,7 +1,6 @@
-package org.springframework.beans.factory.config;
+package org.springframework.beans.factory.support;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.core.io.Resource;
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.core.io.Resource;
  * their bean definition format.
  *
  * @author Juergen Hoeller
- * @see org.springframework.core.io.Resource
+ * @see Resource
  * @since 1.1
  */
 public interface BeanDefinitionReader {

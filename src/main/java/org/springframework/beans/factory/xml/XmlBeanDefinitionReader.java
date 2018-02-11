@@ -155,7 +155,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     public int registerBeanDefinitions(Document doc, Resource resource) throws BeansException {
         XmlBeanDefinitionParser parser = (XmlBeanDefinitionParser) BeanUtils.instantiateClass(this.parserClass);
-        return parser.registerBeanDefinitions(getBeanFactory(), getBeanClassLoader(), doc, resource);
+        return parser.registerBeanDefinitions(this, doc, resource);
     }
 
 
