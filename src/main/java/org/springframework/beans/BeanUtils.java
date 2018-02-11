@@ -34,7 +34,6 @@ import java.util.List;
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
- * @version $Id: BeanUtils.java,v 1.15 2004/03/18 02:46:12 trisberg Exp $
  */
 public abstract class BeanUtils {
 
@@ -181,11 +180,11 @@ public abstract class BeanUtils {
     }
 
 
-
     /**
      * Find a JavaBeans <code>PropertyDescriptor</code> for the given method,
      * with the method either being the read method or the write method for
      * that bean property.
+     *
      * @param method the method to find a corresponding PropertyDescriptor for
      * @return the corresponding PropertyDescriptor, or <code>null</code> if none
      * @throws BeansException if PropertyDescriptor lookup fails
@@ -204,6 +203,7 @@ public abstract class BeanUtils {
 
     /**
      * Retrieve the JavaBeans <code>PropertyDescriptor</code>s of a given class.
+     *
      * @param clazz the Class to retrieve the PropertyDescriptors for
      * @return an array of <code>PropertyDescriptors</code> for the given class
      * @throws BeansException if PropertyDescriptor look fails

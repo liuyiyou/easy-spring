@@ -17,7 +17,7 @@
 	
     <bean name="transactionManager" class="org.springframework.transaction.CountingTxManager">
     </bean>
-	
+
     <bean name="wrappedAssemblerOne" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
     	<property name="transactionManager"><ref bean="transactionManager"/></property>
         <property name="target"><ref bean="assemblerOne"/></property>
@@ -28,7 +28,7 @@
             </props>
         </property>
     </bean>
-    
+
     <bean name="wrappedAssemblerTwo" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
     	<property name="transactionManager"><ref bean="transactionManager"/></property>
         <property name="target"><ref bean="assemblerTwo"/></property>
