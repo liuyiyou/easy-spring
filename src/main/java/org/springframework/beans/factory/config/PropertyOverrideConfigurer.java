@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.support.BeanDefinition;
 
 /**
  * A property resource configurer that overrides bean property values in an application

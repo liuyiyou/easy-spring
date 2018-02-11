@@ -32,7 +32,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.RuntimeBeanReference;

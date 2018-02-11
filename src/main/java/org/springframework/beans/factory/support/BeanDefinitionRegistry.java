@@ -18,7 +18,6 @@ package org.springframework.beans.factory.support;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.config.BeanDefinition;
 
 /**
  * Interface for registries that hold bean definitions,

@@ -29,7 +29,6 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.FactoryBeanCircularReferenceException;
 import org.springframework.beans.factory.HierarchicalBeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
@@ -44,6 +43,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ *
+ * BeanFactory的抽象实现，包含单例Bean的缓存、别名、FactoryBean处理，BeanDefinition合并
+ * 另外，也提供管理Bean父子关系，由子类实现的方法主要是getBeanDefinition和createBean
  * Abstract superclass for BeanFactory implementations.
  * Implements the ConfigurableBeanFactory SPI interface.
  * <p>

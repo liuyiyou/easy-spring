@@ -28,6 +28,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
+import org.springframework.beans.factory.support.BeanDefinition;
 import org.springframework.core.Constants;
 import org.springframework.util.ObjectUtils;
 

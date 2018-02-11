@@ -134,8 +134,6 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
     @Override
     public int registerBeanDefinitions(BeanDefinitionReader beanDefinitionReader,
                                        Document doc, Resource resource) {
-//        this.beanFactory = beanFactory;
-//        this.beanClassLoader = beanClassLoader;
         this.beanDefinitionReader = beanDefinitionReader;
         this.resource = resource;
 
@@ -187,7 +185,8 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
      * If no id specified, use the first name in the name attribute as
      * canonical name, registering all others as aliases.
      */
-    protected void loadBeanDefinition(Element ele) {
+    @Override
+    public void loadBeanDefinition(Element ele) {
         String id = ele.getAttribute(ID_ATTRIBUTE);
         String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
         List aliases = new ArrayList();
@@ -195,15 +194,12 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
             String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, BEAN_NAME_DELIMITERS, true, true);
             aliases.addAll(Arrays.asList(nameArr));
         }
-
         if (id == null || "".equals(id) && !aliases.isEmpty()) {
             id = (String) aliases.remove(0);
             logger.debug("No XML 'id' specified - using '" + id + "' as ID and " + aliases + " as aliases");
         }
-
         //解析Bean
         AbstractBeanDefinition beanDefinition = parseBeanDefinition(ele, id);
-
         if (id == null || "".equals(id)) {
             if (beanDefinition instanceof RootBeanDefinition) {
                 id = ((RootBeanDefinition) beanDefinition).getBeanClassName();
@@ -230,7 +226,7 @@ public class DefaultXmlBeanDefinitionParser implements XmlBeanDefinitionParser {
      * @param beanName
      * @return
      */
-    protected AbstractBeanDefinition parseBeanDefinition(Element ele, String beanName) {
+    public  AbstractBeanDefinition parseBeanDefinition(Element ele, String beanName) {
         String className = null;
         try {
             //解析class属性

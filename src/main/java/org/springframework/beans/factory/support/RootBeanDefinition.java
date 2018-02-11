@@ -1,37 +1,10 @@
-/*
- * Copyright 2002-2004 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.beans.factory.support;
 
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 
-/**
- * Root bean definitions have a class plus optionally constructor argument
- * values and property values. This is the most common type of bean definition.
- *
- * <p>Note that root bean definitions do not have to specify a bean class:
- * This can be useful for deriving childs from, each with its own bean class
- * but inheriting common property values and other settings.
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @see org.springframework.beans.factory.config.AutowireCapableBeanFactory
- */
+
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
     /**

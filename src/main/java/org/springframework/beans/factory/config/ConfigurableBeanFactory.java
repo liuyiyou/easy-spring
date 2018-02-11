@@ -21,6 +21,7 @@ import java.beans.PropertyEditor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.HierarchicalBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinition;
 
 /**
  * Configuration interface to be implemented by most if not all bean factories.

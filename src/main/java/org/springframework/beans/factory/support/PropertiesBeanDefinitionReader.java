@@ -265,7 +265,6 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
             prefix = "";
         }
         int beanCount = 0;
-
         Set keys = m.keySet();
         Iterator itr = keys.iterator();
         while (itr.hasNext()) {
@@ -334,7 +333,6 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
                     // Extract property name: property is of form dog(ref)
                     property = property.substring(0, property.length() - REF_SUFFIX.length());
                     String ref = (String) m.get(key);
-
                     // It doesn't matter if the referenced bean hasn't yet been registered:
                     // this will ensure that the reference is resolved at rungime
                     // Default is not to use singleton
@@ -382,12 +380,10 @@ public class PropertiesBeanDefinitionReader extends AbstractBeanDefinitionReader
             beanDefinition.setSingleton(singleton);
             beanDefinition.setLazyInit(lazyInit);
             getBeanFactory().registerBeanDefinition(beanName, beanDefinition);
-        }
-        catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex) {
             throw new BeanDefinitionStoreException(resourceDescription, beanName,
                     "Bean class [" + className + "] not found", ex);
-        }
-        catch (NoClassDefFoundError err) {
+        } catch (NoClassDefFoundError err) {
             throw new BeanDefinitionStoreException(resourceDescription, beanName,
                     "Class that bean class [" + className + "] depends on not found", err);
         }

@@ -23,7 +23,6 @@ import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.FactoryBeanCircularReferenceException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.util.StringUtils;
 
