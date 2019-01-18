@@ -200,7 +200,7 @@ public interface BeanWrapper {
     /**
      * Get the property descriptor for a particular property.
      *
-     * @param propertyName property to check status for
+     * @param propertyName property to check status for/
      * @return the property descriptor for a particular property
      * @throws FatalBeanException if there is no such property
      */

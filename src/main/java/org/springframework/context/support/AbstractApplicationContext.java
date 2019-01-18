@@ -51,43 +51,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Partial implementation of ApplicationContext. Doesn't mandate the type
- * of storage used for configuration, but implements common functionality.
- * Uses the Template Method design pattern, requiring concrete subclasses
- * to implement abstract methods.
- * <p>
- * <p>In contrast to a plain bean factory, an ApplicationContext is supposed
- * to detect special beans defined in its bean factory: Therefore, this class
- * automatically registers BeanFactoryPostProcessors, BeanPostProcessors
- * and ApplicationListeners that are defined as beans in the context.
- * <p>
- * <p>A MessageSource may be also supplied as a bean in the context, with
- * the name "messageSource". Else, message resolution is delegated to the
- * parent context.
- * <p>
- * <p>Implements resource loading through extending DefaultResourceLoader.
- * Therefore, treats resource paths as class path resources. Only supports
- * full classpath resource names that include the package path, like
- * "mypackage/myresource.dat".
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @version $Revision: 1.35 $
- * @see #refreshBeanFactory
- * @see #getBeanFactory
- * @see #MESSAGE_SOURCE_BEAN_NAME
- * @since January 21, 2001
- */
+
 public abstract class AbstractApplicationContext extends DefaultResourceLoader
         implements ConfigurableApplicationContext {
 
-    /**
-     * Name of the MessageSource bean in the factory.
-     * If none is supplied, message resolution is delegated to the parent.
-     *
-     * @see MessageSource
-     */
     public static final String MESSAGE_SOURCE_BEAN_NAME = "messageSource";
 
 

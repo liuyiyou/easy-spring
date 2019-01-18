@@ -42,30 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- *
- * BeanFactory的抽象实现，包含单例Bean的缓存、别名、FactoryBean处理，BeanDefinition合并
- * 另外，也提供管理Bean父子关系，由子类实现的方法主要是getBeanDefinition和createBean
- * Abstract superclass for BeanFactory implementations.
- * Implements the ConfigurableBeanFactory SPI interface.
- * <p>
- * <p>This class provides singleton/prototype determination, singleton cache,
- * aliases, FactoryBean handling, and bean definition merging for child bean
- * definitions. It also allows for management of a bean factory hierarchy,
- * implementing the HierarchicalBeanFactory interface.
- * <p>
- * <p>The main template methods to be implemented by subclasses are
- * getBeanDefinition and createBean, retrieving a bean definition for
- * a given bean name respectively creating a bean instance for a given
- * bean definition.
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @version $Id: AbstractBeanFactory.java,v 1.51 2004/03/23 20:16:59 jhoeller Exp $
- * @see #getBeanDefinition
- * @see #createBean
- * @since 15 April 2001
- */
+
 public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, HierarchicalBeanFactory {
 
 
@@ -183,12 +160,12 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
     }
 
     @Override
-    public Object getBean(String name, Class requiredType) throws BeansException {
+    public <T> T getBean(String name, Class requiredType) throws BeansException {
         Object bean = getBean(name);
         if (!requiredType.isAssignableFrom(bean.getClass())) {
             throw new BeanNotOfRequiredTypeException(name, requiredType, bean);
         }
-        return bean;
+        return (T) bean;
     }
 
     @Override
@@ -421,12 +398,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
         return name.startsWith(FACTORY_BEAN_PREFIX);
     }
 
-    /**
-     * Initialize the given BeanWrapper with the custom editors registered
-     * with this factory.
-     *
-     * @param bw the BeanWrapper to initialize
-     */
+
     protected void initBeanWrapper(BeanWrapper bw) {
         for (Iterator it = this.customEditors.keySet().iterator(); it.hasNext(); ) {
             Class clazz = (Class) it.next();
@@ -434,16 +406,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
         }
     }
 
-    /**
-     * Return the names of beans in the singleton cache that match the given
-     * object type (including subclasses). Will <i>not</i> consider FactoryBeans
-     * as the type of their created objects is not known before instantiation.
-     * <p>Does not consider any hierarchy this factory may participate in.
-     *
-     * @param type class or interface to match, or null for all bean names
-     * @return the names of beans in the singleton cache that match the given
-     * object type (including subclasses), or an empty array if none
-     */
+
     public String[] getSingletonNames(Class type) {
         Set keys = this.singletonCache.keySet();
         Set matches = new HashSet();
@@ -458,14 +421,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
         return (String[]) matches.toArray(new String[matches.size()]);
     }
 
-    /**
-     * Get the object for the given shared bean, either the bean
-     * instance itself or its created object in case of a FactoryBean.
-     *
-     * @param name         name that may include factory dereference prefix
-     * @param beanInstance the shared bean instance
-     * @return the singleton instance of the bean
-     */
+
     protected Object getObjectForSharedInstance(String name, Object beanInstance) {
         String beanName = transformedBeanName(name);
 
@@ -505,15 +461,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
         return beanInstance;
     }
 
-    /**
-     * Return a RootBeanDefinition, even by traversing parent if the parameter is a child definition.
-     * Will ask the parent bean factory if not found in this instance.
-     * <p>
-     * 返回一个RootBeanDefinition，即使参数是一个子类定义，也可以遍历父类。 如果在这个实例中没有找到，会询问父级bean工厂。
-     * </p>
-     *
-     * @return a merged RootBeanDefinition with overridden properties
-     */
+
     public RootBeanDefinition getMergedBeanDefinition(String beanName, boolean includingAncestors)
             throws BeansException {
         try {
@@ -527,14 +475,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
         }
     }
 
-    /**
-     * Return a RootBeanDefinition, even by traversing parent if the parameter is a child definition.
-     * <p>
-     * 返回一个RootBeanDefinition，即使参数是一个子类定义，也可以遍历父类。
-     * </p>
-     *
-     * @return a merged RootBeanDefinition with overridden properties
-     */
+
     protected RootBeanDefinition getMergedBeanDefinition(String beanName, BeanDefinition bd) {
         if (bd instanceof RootBeanDefinition) {
             return (RootBeanDefinition) bd;
@@ -561,54 +502,16 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
     // Abstract methods to be implemented by concrete subclasses
     //---------------------------------------------------------------------
 
-    /**
-     * Check if this bean factory contains a bean definition with the given name.
-     * Does not consider any hierarchy this factory may participate in.
-     * Invoked by containsBean when no cached singleton instance is found.
-     *
-     * @param beanName the name of the bean to look for
-     * @return if this bean factory contains a bean definition with the given name
-     * @see #containsBean
-     */
+
     public abstract boolean containsBeanDefinition(String beanName);
 
-    /**
-     * Return the bean definition for the given bean name.
-     * Subclasses should normally implement caching, as this method is invoked
-     * by this class every time bean definition metadata is needed.
-     *
-     * @param beanName name of the bean to find a definition for
-     * @return the BeanDefinition for this prototype name. Must never return null.
-     * @throws NoSuchBeanDefinitionException if the bean definition cannot be resolved
-     * @throws BeansException                in case of errors
-     * @see RootBeanDefinition
-     * @see ChildBeanDefinition
-     */
+
     public abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
-    /**
-     * Create a bean instance for the given bean definition.
-     * The bean definition will already have been merged with the parent
-     * definition in case of a child definition.
-     * <p>All the other methods in this class invoke this method, although
-     * beans may be cached after being instantiated by this method. All bean
-     * instantiation within this class is performed by this method.
-     *
-     * @param beanName             name of the bean
-     * @param mergedBeanDefinition the bean definition for the bean
-     * @return a new instance of the bean
-     * @throws BeansException in case of errors
-     */
+
     protected abstract Object createBean(String beanName, RootBeanDefinition mergedBeanDefinition)
             throws BeansException;
 
-    /**
-     * Destroy the given bean. Must destroy beans that depend on the given
-     * bean before the bean itself. Should not throw any exceptions.
-     *
-     * @param beanName name of the bean
-     * @param bean     the bean instance to destroy
-     */
     protected abstract void destroyBean(String beanName, Object bean);
 
 }

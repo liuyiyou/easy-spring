@@ -25,25 +25,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Static convenience methods for JavaBeans, for instantiating beans,
- * copying bean properties, etc.
- * <p>
- * <p>Mainly for use within the framework, but to some degree also
- * useful for application classes.
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
- */
+
 public abstract class BeanUtils {
 
-    /**
-     * Convenience method to instantiate a class using its no-arg constructor.
-     * As this method doesn't try to load classes by name, it should avoid class-loading issues.
-     *
-     * @param clazz class to instantiate
-     * @return the new instance
-     */
     public static Object instantiateClass(Class clazz) throws BeansException {
         try {
             return clazz.newInstance();
@@ -56,13 +40,7 @@ public abstract class BeanUtils {
         }
     }
 
-    /**
-     * Convenience method to instantiate a class using the given constructor.
-     * As this method doesn't try to load classes by name, it should avoid class-loading issues.
-     *
-     * @param constructor constructor to instantiate
-     * @return the new instance
-     */
+
     public static Object instantiateClass(Constructor constructor, Object[] arguments) throws BeansException {
         try {
             return constructor.newInstance(arguments);
@@ -80,16 +58,7 @@ public abstract class BeanUtils {
         }
     }
 
-    /**
-     * Determine if the given type is assignable from the given value,
-     * assuming setting by reflection. Considers primitive wrapper classes
-     * as assignable to the corresponding primitive types.
-     * <p>For example used in a bean factory's constructor resolution.
-     *
-     * @param type  the target type
-     * @param value the value that should be assigned to the type
-     * @return if the type is assignable from the value
-     */
+
     public static boolean isAssignable(Class type, Object value) {
         return (type.isInstance(value) ||
                 (!type.isPrimitive() && value == null) ||
@@ -103,61 +72,34 @@ public abstract class BeanUtils {
                 (type.equals(double.class) && value instanceof Double));
     }
 
-    /**
-     * Check if the given class represents a "simple" property,
-     * i.e. a primitive, a String, a Class, or a corresponding array.
-     * Used to determine properties to check for a "simple" dependency-check.
-     *
-     * @see org.springframework.beans.factory.support.RootBeanDefinition#DEPENDENCY_CHECK_SIMPLE
-     * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#dependencyCheck
-     */
+
     public static boolean isSimpleProperty(Class clazz) {
         return clazz.isPrimitive() || isPrimitiveArray(clazz) || isPrimitiveWrapperArray(clazz) ||
                 clazz.equals(String.class) || clazz.equals(String[].class) ||
                 clazz.equals(Class.class) || clazz.equals(Class[].class);
     }
 
-    /**
-     * Check if the given class represents a primitive array,
-     * i.e. boolean, byte, char, short, int, long, float, or double.
-     */
+
     public static boolean isPrimitiveArray(Class clazz) {
         return boolean[].class.equals(clazz) || byte[].class.equals(clazz) || char[].class.equals(clazz) ||
                 short[].class.equals(clazz) || int[].class.equals(clazz) || long[].class.equals(clazz) ||
                 float[].class.equals(clazz) || double[].class.equals(clazz);
     }
 
-    /**
-     * Check if the given class represents an array of primitive wrappers,
-     * i.e. Boolean, Byte, Character, Short, Integer, Long, Float, or Double.
-     */
+
     public static boolean isPrimitiveWrapperArray(Class clazz) {
         return Boolean[].class.equals(clazz) || Byte[].class.equals(clazz) || Character[].class.equals(clazz) ||
                 Short[].class.equals(clazz) || Integer[].class.equals(clazz) || Long[].class.equals(clazz) ||
                 Float[].class.equals(clazz) || Double[].class.equals(clazz);
     }
 
-    /**
-     * Copy the property values of the given source bean into the target bean.
-     *
-     * @param source source bean
-     * @param target target bean
-     * @throws IllegalArgumentException if the classes of source and target do not match
-     */
+
     public static void copyProperties(Object source, Object target)
             throws IllegalArgumentException, BeansException {
         copyProperties(source, target, null);
     }
 
-    /**
-     * Copy the property values of the given source bean into the given target bean,
-     * ignoring the given ignoreProperties.
-     *
-     * @param source           source bean
-     * @param target           target bean
-     * @param ignoreProperties array of property names to ignore
-     * @throws IllegalArgumentException if the classes of source and target do not match
-     */
+
     public static void copyProperties(Object source, Object target, String[] ignoreProperties)
             throws IllegalArgumentException, BeansException {
         if (source == null || target == null || !source.getClass().isInstance(target)) {
@@ -180,15 +122,6 @@ public abstract class BeanUtils {
     }
 
 
-    /**
-     * Find a JavaBeans <code>PropertyDescriptor</code> for the given method,
-     * with the method either being the read method or the write method for
-     * that bean property.
-     *
-     * @param method the method to find a corresponding PropertyDescriptor for
-     * @return the corresponding PropertyDescriptor, or <code>null</code> if none
-     * @throws BeansException if PropertyDescriptor lookup fails
-     */
     public static PropertyDescriptor findPropertyForMethod(Method method) throws BeansException {
         Assert.notNull(method, "Method must not be null");
         PropertyDescriptor[] pds = getPropertyDescriptors(method.getDeclaringClass());
@@ -201,13 +134,7 @@ public abstract class BeanUtils {
         return null;
     }
 
-    /**
-     * Retrieve the JavaBeans <code>PropertyDescriptor</code>s of a given class.
-     *
-     * @param clazz the Class to retrieve the PropertyDescriptors for
-     * @return an array of <code>PropertyDescriptors</code> for the given class
-     * @throws BeansException if PropertyDescriptor look fails
-     */
+
     public static PropertyDescriptor[] getPropertyDescriptors(Class clazz) throws BeansException {
         CachedIntrospectionResults cr = CachedIntrospectionResults.forClass(clazz);
         return cr.getBeanInfo().getPropertyDescriptors();
