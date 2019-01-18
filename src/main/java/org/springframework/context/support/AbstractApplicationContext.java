@@ -1,23 +1,8 @@
-/*
- * Copyright 2002-2004 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.context.support;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -52,49 +37,26 @@ import java.util.Locale;
 import java.util.Map;
 
 
+@Slf4j
 public abstract class AbstractApplicationContext extends DefaultResourceLoader
         implements ConfigurableApplicationContext {
 
     public static final String MESSAGE_SOURCE_BEAN_NAME = "messageSource";
 
 
-    //---------------------------------------------------------------------
-    // Instance data
-    //---------------------------------------------------------------------
-
-    /**
-     * Log4j logger used by this class. Available to subclasses.
-     */
-    protected final Log logger = LogFactory.getLog(getClass());
-
-    /**
-     * Parent context
-     */
     private ApplicationContext parent;
 
-    /**
-     * BeanFactoryPostProcessors to apply on refresh
-     */
+
     private final List beanFactoryPostProcessors = new ArrayList();
 
-    /**
-     * Display name
-     */
+    @Getter
+    @Setter
     private String displayName = getClass().getName() + ";hashCode=" + hashCode();
 
-    /**
-     * System time in milliseconds when this context started
-     */
     private long startupTime;
 
-    /**
-     * MessageSource helper we delegate our implementation of this interface to
-     */
     private MessageSource messageSource;
 
-    /**
-     * Helper class used in event publishing
-     */
     private final ApplicationEventMulticaster eventMulticaster = new ApplicationEventMulticasterImpl();
 
 
@@ -102,17 +64,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
     // Constructors
     //---------------------------------------------------------------------
 
-    /**
-     * Create a new AbstractApplicationContext with no parent.
-     */
+
     public AbstractApplicationContext() {
     }
 
-    /**
-     * Create a new AbstractApplicationContext with the given parent context.
-     *
-     * @param parent parent context
-     */
+
     public AbstractApplicationContext(ApplicationContext parent) {
         this.parent = parent;
     }
@@ -122,54 +78,20 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
     // Implementation of ApplicationContext
     //---------------------------------------------------------------------
 
-    /**
-     * Return the parent context, or null if there is no parent,
-     * and this is the root of the context hierarchy.
-     *
-     * @return the parent context, or null if there is no parent
-     */
+
     public ApplicationContext getParent() {
         return parent;
     }
 
-    /**
-     * To avoid endless constructor chaining, only concrete classes
-     * take this in their constructor, and then invoke this method
-     */
-    protected void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
 
-    /**
-     * Return a friendly name for context
-     *
-     * @return a display name for the context
-     */
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    /**
-     * Return the timestamp when this context was first loaded
-     *
-     * @return the timestamp (ms) when this context was first loaded
-     */
     public long getStartupDate() {
         return startupTime;
     }
 
-    /**
-     * Publish the given event to all listeners.
-     * <p>Note: Listeners get initialized after the message source, to be able
-     * to access it within listener implementations. Thus, message source
-     * implementation cannot publish events.
-     *
-     * @param event event to publish. The event may be application-specific,
-     *              or a standard framework event.
-     */
+
     public void publishEvent(ApplicationEvent event) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Publishing event in context [" + getDisplayName() + "]: " + event.toString());
+        if (log.isDebugEnabled()) {
+            log.debug("Publishing event in context [" + getDisplayName() + "]: " + event.toString());
         }
         this.eventMulticaster.onApplicationEvent(event);
         if (this.parent != null) {
@@ -190,20 +112,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         this.beanFactoryPostProcessors.add(beanFactoryPostProcessor);
     }
 
-    /**
-     * Return the list of BeanPostProcessors that will get applied
-     * to beans created with this factory.
-     */
+
     public List getBeanFactoryPostProcessors() {
         return beanFactoryPostProcessors;
     }
 
 
-    /**
-     * 加载或重新加载配置。
-     *
-     * @throws BeansException
-     */
+
     public void refresh() throws BeansException {
         this.startupTime = System.currentTimeMillis();
         //告诉子类刷新内部的bean工厂
@@ -240,23 +155,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         publishEvent(new ContextRefreshedEvent(this));
     }
 
-    /**
-     * Modify the application context's internal bean factory after its standard
-     * initialization. All bean definitions will have been loaded, but no beans
-     * will have been instantiated yet. This allows for registering special
-     * BeanPostProcessors etc in certain ApplicationContext implementations.
-     *
-     * @param beanFactory the bean factory used by the application context
-     * @throws BeansException in case of errors
-     */
+
     protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
     }
 
-    /**
-     * Instantiate and invoke all registered BeanFactoryPostProcessor beans,
-     * respecting explicit order if given.
-     * Must be called before singleton instantiation.
-     */
+
     private void invokeBeanFactoryPostProcessors() throws BeansException {
         String[] beanNames = getBeanDefinitionNames(BeanFactoryPostProcessor.class);
         BeanFactoryPostProcessor[] factoryProcessors = new BeanFactoryPostProcessor[beanNames.length];
@@ -270,11 +173,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         }
     }
 
-    /**
-     * Instantiate and invoke all registered BeanPostProcessor beans,
-     * respecting explicit order if given.
-     * Must be called before singleton instantiation.
-     */
+
     private void registerBeanPostProcessors() throws BeansException {
         String[] beanNames = getBeanDefinitionNames(BeanPostProcessor.class);
         if (beanNames.length > 0) {
@@ -289,10 +188,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         }
     }
 
-    /**
-     * Initialize the MessageSource.
-     * Use parent's if none defined in this context.
-     */
+
     private void initMessageSource() throws BeansException {
         try {
             this.messageSource = (MessageSource) getBean(MESSAGE_SOURCE_BEAN_NAME);
@@ -303,19 +199,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
                 ((HierarchicalMessageSource) this.messageSource).setParentMessageSource(this.parent);
             }
         } catch (NoSuchBeanDefinitionException ex) {
-            logger.info("No MessageSource found for [" + getDisplayName() + "]: using empty StaticMessageSource");
+            log.info("No MessageSource found for [" + getDisplayName() + "]: using empty StaticMessageSource");
             // use empty message source to be able to accept getMessage calls
             this.messageSource = new StaticMessageSource();
         }
     }
 
-    /**
-     * Template method which can be overridden to add context-specific refresh work.
-     * Called on initialization of special beans, before instantiation of singletons.
-     *
-     * @throws BeansException in case of errors during refresh
-     * @see #refresh
-     */
+
     protected void onRefresh() throws BeansException {
         // for subclasses: do nothing by default
     }
@@ -325,13 +215,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
      * Doesn't affect other listeners, which can be added without being beans.
      */
     private void refreshListeners() throws BeansException {
-        logger.info("Refreshing listeners");
+        log.info("Refreshing listeners");
         Collection listeners = getBeansOfType(ApplicationListener.class, true, false).values();
-        logger.debug("Found " + listeners.size() + " listeners in bean factory");
+        log.debug("Found " + listeners.size() + " listeners in bean factory");
         for (Iterator it = listeners.iterator(); it.hasNext(); ) {
             ApplicationListener listener = (ApplicationListener) it.next();
             addListener(listener);
-            logger.info("Application listener [" + listener + "] added");
+            log.info("Application listener [" + listener + "] added");
         }
     }
 
@@ -349,7 +239,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
      * Destroy the singletons in the bean factory of this application context.
      */
     public void close() {
-        logger.info("Closing application context [" + getDisplayName() + "]");
+        log.info("Closing application context [" + getDisplayName() + "]");
 
         // destroy all cached singletons in this context,
         // invoking DisposableBean.destroy and/or "destroy-method"

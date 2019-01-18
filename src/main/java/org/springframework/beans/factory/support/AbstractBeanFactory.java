@@ -1,23 +1,6 @@
-/*
- * Copyright 2002-2004 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.beans.factory.support;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
@@ -43,60 +26,33 @@ import java.util.Map;
 import java.util.Set;
 
 
+@Slf4j
 public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, HierarchicalBeanFactory {
 
 
-    /**
-     * Logger available to subclasses
-     */
-    protected final Log logger = LogFactory.getLog(getClass());
-
-    /**
-     * Parent bean factory, for bean inheritance support
-     * <p>
-     * 因为实现了 HierarchicalBeanFactory
-     */
     private BeanFactory parentBeanFactory;
 
-    /**
-     * Custom PropertyEditors to apply to the beans of this factory
-     */
+
     private Map customEditors = new HashMap();
 
-    /**
-     * Dependency types to ignore on dependency check and autowire
-     */
+
     private final Set ignoreDependencyTypes = new HashSet();
 
-    /**
-     * BeanPostProcessors to apply in createBean
-     */
+
     private final List beanPostProcessors = new ArrayList();
 
-    /**
-     * Map from alias to canonical bean name
-     */
+
     private final Map aliasMap = Collections.synchronizedMap(new HashMap());
 
-    /**
-     * Cache of singletons: bean name --> bean instance
-     */
+
     private final Map singletonCache = Collections.synchronizedMap(new HashMap());
 
 
-    /**
-     * Create a new AbstractBeanFactory.
-     */
     public AbstractBeanFactory() {
         ignoreDependencyType(BeanFactory.class);
     }
 
-    /**
-     * Create a new AbstractBeanFactory with the given parent.
-     *
-     * @param parentBeanFactory parent bean factory, or null if none
-     * @see #getBean
-     */
+
     public AbstractBeanFactory(BeanFactory parentBeanFactory) {
         this();
         this.parentBeanFactory = parentBeanFactory;
@@ -107,12 +63,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
     // Implementation of BeanFactory
     //---------------------------------------------------------------------
 
-    /**
-     * Return the bean with the given name,
-     * checking the parent bean factory if not found.
-     *
-     * @param name name of the bean to retrieve
-     */
+
     @Override
     public Object getBean(String name) throws BeansException {
         //返回bean名称，必要时剥离工厂解引用前缀，并将别名解析为规范名称。
@@ -121,8 +72,8 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
         //优先从缓存中获取单例bean
         Object sharedInstance = this.singletonCache.get(beanName);
         if (sharedInstance != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Returning cached instance of singleton bean '" + beanName + "'");
+            if (log.isDebugEnabled()) {
+                log.debug("Returning cached instance of singleton bean '" + beanName + "'");
             }
             //从缓存中获取
             return getObjectForSharedInstance(name, sharedInstance);
@@ -147,7 +98,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
                     // re-check singleton cache within synchronized block
                     sharedInstance = this.singletonCache.get(beanName);
                     if (sharedInstance == null) {
-                        logger.info("Creating shared instance of singleton bean '" + beanName + "'");
+                        log.info("Creating shared instance of singleton bean '" + beanName + "'");
                         sharedInstance = createBean(beanName, mergedBeanDefinition);
                         addSingleton(beanName, sharedInstance);
                     }
@@ -302,7 +253,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
 
     @Override
     public void registerAlias(String beanName, String alias) throws BeanDefinitionStoreException {
-        logger.debug("Registering alias '" + alias + "' for bean with name '" + beanName + "'");
+        log.debug("Registering alias '" + alias + "' for bean with name '" + beanName + "'");
         synchronized (this.aliasMap) {
             Object registeredName = this.aliasMap.get(alias);
             if (registeredName != null) {
@@ -341,8 +292,8 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
 
     @Override
     public void destroySingletons() {
-        if (logger.isInfoEnabled()) {
-            logger.info("Destroying singletons in factory {" + this + "}");
+        if (log.isInfoEnabled()) {
+            log.info("Destroying singletons in factory {" + this + "}");
         }
         synchronized (this.singletonCache) {
             Set singletonCacheKeys = new HashSet(this.singletonCache.keySet());
@@ -439,7 +390,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
             if (!isFactoryDereference(name)) {
                 // return bean instance from factory
                 FactoryBean factory = (FactoryBean) beanInstance;
-                logger.debug("Bean with name '" + beanName + "' is a factory bean");
+                log.debug("Bean with name '" + beanName + "' is a factory bean");
                 try {
                     beanInstance = factory.getObject();
                 } catch (BeansException ex) {
@@ -454,7 +405,7 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory, Hi
                 }
             } else {
                 // the user wants the factory itself
-                logger.debug("Calling code asked for FactoryBean instance for name '" + beanName + "'");
+                log.debug("Calling code asked for FactoryBean instance for name '" + beanName + "'");
             }
         }
 

@@ -1,4 +1,4 @@
-package org.springframework.web.context.support;
+package org.springframework.web.context;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.web.context.WebApplicationContext;

@@ -36,24 +36,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Bean definition reader for Spring's default XML bean definition format.
- * Typically applied to a DefaultListableBeanFactory.
- * <p>
- * <p>The structure, element and attribute names of the required XML document
- * are hard-coded in this class. (Of course a transform could be run if necessary
- * to produce this format). "beans" doesn't need to be the root element of the XML
- * document: This class will parse all bean definition elements in the XML file.
- * <p>
- * <p>This class registers each bean definition with the given bean factory superclass,
- * and relies on the latter's implementation of the BeanDefinitionRegistry interface.
- * It supports singletons, prototypes, and references to either of these kinds of bean.
- *
- * @author Juergen Hoeller
- * @version $Id: XmlBeanDefinitionReader.java,v 1.8 2004/03/18 02:46:12 trisberg Exp $
- * @see #setParserClass
- * @since 26.11.2003
- */
+
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     protected final Log logger = LogFactory.getLog(getClass());
@@ -65,38 +48,20 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     private Class parserClass = DefaultXmlBeanDefinitionParser.class;
 
 
-    /**
-     * Create new XmlBeanDefinitionReader for the given bean factory.
-     */
     public XmlBeanDefinitionReader(BeanDefinitionRegistry beanFactory) {
         super(beanFactory);
     }
 
-    /**
-     * Set if the XML parser should validate the document and thus enforce a DTD.
-     */
+
     public void setValidating(boolean validating) {
         this.validating = validating;
     }
 
-    /**
-     * Set a SAX entity resolver to be used for parsing. By default, BeansDtdResolver
-     * will be used. Can be overridden for custom entity resolution, e.g. relative
-     * to some specific base path.
-     *
-     * @see BeansDtdResolver
-     */
+
     public void setEntityResolver(EntityResolver entityResolver) {
         this.entityResolver = entityResolver;
     }
 
-    /**
-     * Set the XmlBeanDefinitionParser implementation to use.
-     * Default is DefaultXmlBeanDefinitionParser.
-     *
-     * @see XmlBeanDefinitionParser
-     * @see DefaultXmlBeanDefinitionParser
-     */
     public void setParserClass(Class parserClass) {
         if (this.parserClass == null || !XmlBeanDefinitionParser.class.isAssignableFrom(parserClass)) {
             throw new IllegalArgumentException("parserClass must be a XmlBeanDefinitionParser");
@@ -104,12 +69,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         this.parserClass = parserClass;
     }
 
-    /**
-     * Load bean definitions from the specified XML file.
-     *
-     * @param resource the resource descriptor for the XML file
-     * @throws BeansException in case of loading or parsing errors
-     */
+
     public int loadBeanDefinitions(Resource resource) throws BeansException {
         if (resource == null) {
             throw new BeanDefinitionStoreException("Resource cannot be null: expected an XML file");
@@ -145,28 +105,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         }
     }
 
-    /**
-     * Register the bean definitions contained in the given DOM document.
-     * All calls go through this.
-     *
-     * @param doc the DOM document
-     * @throws BeansException in case of parsing errors
-     */
-
     public int registerBeanDefinitions(Document doc, Resource resource) throws BeansException {
         XmlBeanDefinitionParser parser = (XmlBeanDefinitionParser) BeanUtils.instantiateClass(this.parserClass);
         return parser.registerBeanDefinitions(this, doc, resource);
     }
 
 
-    /**
-     * Private implementation of SAX ErrorHandler used when validating XML.
-     */
     private static class BeansErrorHandler implements ErrorHandler {
 
-        /**
-         * We can't use the enclosing class' logger as it's protected and inherited.
-         */
+
         private final static Log logger = LogFactory.getLog(XmlBeanFactory.class);
 
         public void error(SAXParseException ex) throws SAXException {

@@ -1,21 +1,6 @@
-/*
- * Copyright 2002-2004 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.springframework.beans.factory.support;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.BeanFactory;
@@ -34,51 +19,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Concrete implementation of ListableBeanFactory.
- * Can be used as a standalone bean factory,
- * or as a superclass for custom bean factories.
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @version $Id: DefaultListableBeanFactory.java,v 1.20 2004/03/22 14:07:47 jhoeller Exp $
- * @since 16 April 2001
+ * 可直接对外提供的BeanFactory
  */
+@Slf4j
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
         implements ConfigurableListableBeanFactory, BeanDefinitionRegistry {
 
-    /* Whether to allow re-registration of a different definition with the same name */
     private boolean allowBeanDefinitionOverriding = true;
 
-    /**
-     * Map of bean definition objects, keyed by bean name
-     */
+
     private Map beanDefinitionMap = new HashMap();
 
-    /**
-     * List of bean definition names, in registration order
-     */
+
     private List beanDefinitionNames = new ArrayList();
 
 
-    /**
-     * Create a new DefaultListableBeanFactory.
-     */
+
     public DefaultListableBeanFactory() {
         super();
     }
 
-    /**
-     * Create a new DefaultListableBeanFactory with the given parent.
-     */
+
     public DefaultListableBeanFactory(BeanFactory parentBeanFactory) {
         super(parentBeanFactory);
     }
 
-    /**
-     * Set if it should be allowed to override bean definitions by registering a
-     * different definition with the same name, automatically replacing the former.
-     * If not, an exception will be thrown. Default is true.
-     */
+
     public void setAllowBeanDefinitionOverriding(boolean allowBeanDefinitionOverriding) {
         this.allowBeanDefinitionOverriding = allowBeanDefinitionOverriding;
     }
@@ -98,10 +64,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         return getBeanDefinitionNames(null);
     }
 
-    /**
-     * Note that this method is slow. Don't invoke it too often:
-     * it's best used only in application initialization.
-     */
+
     public String[] getBeanDefinitionNames(Class type) {
         List matches = new ArrayList();
         Iterator it = this.beanDefinitionNames.iterator();
@@ -151,7 +114,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
                 } catch (FactoryBeanCircularReferenceException ex) {
                     // we're currently creating that FactoryBean
                     // sensible to ignore it, as we are just looking for a certain type
-                    logger.debug("Ignoring exception on FactoryBean type check", ex);
+                    log.debug("Ignoring exception on FactoryBean type check", ex);
                 }
             }
         }
@@ -166,8 +129,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     public void preInstantiateSingletons() {
-        if (logger.isInfoEnabled()) {
-            logger.info("Pre-instantiating singletons in factory [" + this + "]");
+        if (log.isInfoEnabled()) {
+            log.info("Pre-instantiating singletons in factory [" + this + "]");
         }
         for (Iterator it = this.beanDefinitionNames.iterator(); it.hasNext(); ) {
             String beanName = (String) it.next();
@@ -209,7 +172,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
                 throw new BeanDefinitionStoreException("Cannot register bean definition [" + beanDefinition + "] for bean '" +
                         name + "': there's already [" + oldBeanDefinition + "] bound");
             } else {
-                logger.info("Overriding bean definition for bean '" + name +
+                log.info("Overriding bean definition for bean '" + name +
                         "': replacing [" + oldBeanDefinition + "] with [" + beanDefinition + "]");
             }
         } else {
@@ -241,7 +204,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
                 if (bd.getDependsOn() != null) {
                     List dependsOn = Arrays.asList(bd.getDependsOn());
                     if (dependsOn.contains(beanName)) {
-                        logger.debug("Found depending bean '" + beanDefinitionNames[i] + "' for bean '" + beanName + "'");
+                        log.debug("Found depending bean '" + beanDefinitionNames[i] + "' for bean '" + beanName + "'");
                         dependingBeanNames.add(beanDefinitionNames[i]);
                     }
                 }

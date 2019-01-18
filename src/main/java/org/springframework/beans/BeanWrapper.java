@@ -21,43 +21,16 @@ import java.beans.PropertyEditor;
 import java.util.Map;
 
 /**
- * The central interface of Spring's low-level JavaBeans infrastructure.
- * Typically not directly used by application code but rather implicitly
- * via a BeanFactory or a DataBinder.
- * <p>
- * <p>To be implemented by classes that can manipulate Java beans.
- * Implementing classes have the ability to get and set property values
- * (individually or in bulk), get property descriptors and query the
- * readability and writability of properties.
- * <p>
- * <p>This interface supports <b>nested properties</b> enabling the setting
- * of properties on subproperties to an unlimited depth.
- * <p>
- * <p>If a property update causes an exception, a PropertyVetoException will be
- * thrown. Bulk updates continue after exceptions are encountered, throwing an
- * exception wrapping <b>all</b> exceptions encountered during the update.
- * <p>
- * <p>BeanWrapper implementations can be used repeatedly, with their "target"
- * or wrapped object changed.
- * <p>
- * <p>
  * Spring的低级JavaBeans基础架构的中心接口。 通常不直接由应用程序代码使用，而是通过BeanFactory或DataBinder隐式地使用。
  * 由可以操纵Java bean的类来实现。 实现类有能力获取和设置属性值（单独或批量），获取属性描述符和查询属性的可读性和可写性。
  * 该接口支持嵌套属性，可以将子属性的属性设置为无限深度。
  * 如果属性更新导致异常，则抛出PropertyVetoException。 在遇到异常之后，批量更新会继续，并引发一个异常，包装更新过程中遇到的所有异常。
  * BeanWrapper实现可以重复使用，其“目标”或包装对象被改变。
- *
- * @author Rod Johnson
- * @version $Id: BeanWrapper.java,v 1.12 2004/03/19 07:40:12 jhoeller Exp $
- * @see org.springframework.beans.factory.BeanFactory
- * @see org.springframework.validation.DataBinder
- * @since 13 April 2001
  */
 public interface BeanWrapper {
 
     /**
-     * Path separator for nested properties.
-     * Follows normal Java conventions: getFoo().getBar() would be "foo.bar".
+     * 嵌套对象分隔符 user.name
      */
     String NESTED_PROPERTY_SEPARATOR = ".";
 

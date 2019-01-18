@@ -41,7 +41,6 @@ public interface BeanDefinition {
      */
     boolean isLazyInit();
 
-    //上面的是1.1新加的
 
     /**
      * 返回PropertyValues以应用于bean的新实例。
