@@ -1,7 +1,6 @@
 package org.springframework.web.context;
 
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 

@@ -34,7 +34,6 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     private List beanDefinitionNames = new ArrayList();
 
 
-
     public DefaultListableBeanFactory() {
         super();
     }
@@ -81,11 +80,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         return this.beanDefinitionMap.containsKey(name);
     }
 
-    public Map getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans)
+    public Map<String, Object> getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans)
             throws BeansException {
 
         String[] beanNames = getBeanDefinitionNames(type);
-        Map result = new HashMap();
+        Map<String, Object> result = new HashMap<>();
         for (int i = 0; i < beanNames.length; i++) {
             if (includePrototypes || isSingleton(beanNames[i])) {
                 result.put(beanNames[i], getBean(beanNames[i]));

@@ -16,6 +16,7 @@
 
 package org.springframework.context.support;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -35,6 +36,7 @@ import java.io.IOException;
  * @version $Revision: 1.11 $
  * @see org.springframework.beans.factory.xml.XmlBeanDefinitionParser
  */
+@Slf4j
 public abstract class AbstractXmlApplicationContext extends AbstractApplicationContext {
 
     /**
@@ -66,8 +68,8 @@ public abstract class AbstractXmlApplicationContext extends AbstractApplicationC
             initBeanDefinitionReader(beanDefinitionReader);
             loadBeanDefinitions(beanDefinitionReader);
             this.beanFactory = beanFactory;
-            if (logger.isInfoEnabled()) {
-                logger.info("Bean factory for application context '" + getDisplayName() + "': " + beanFactory);
+            if (log.isInfoEnabled()) {
+                log.info("Bean factory for application context '" + getDisplayName() + "': " + beanFactory);
             }
         } catch (IOException ex) {
             throw new ApplicationContextException("I/O error parsing XML document for application context [" +

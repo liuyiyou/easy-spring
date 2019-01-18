@@ -20,7 +20,7 @@ public interface ListableBeanFactory extends BeanFactory {
     boolean containsBeanDefinition(String name);
 
 
-    Map getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans)
+    <T> Map<String, T> getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans)
             throws BeansException;
 
 }

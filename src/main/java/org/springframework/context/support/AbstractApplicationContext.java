@@ -118,7 +118,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
     }
 
 
-
     public void refresh() throws BeansException {
         this.startupTime = System.currentTimeMillis();
         //告诉子类刷新内部的bean工厂
@@ -295,7 +294,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         return getBeanFactory().containsBeanDefinition(name);
     }
 
-    public Map getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans) throws BeansException {
+    public Map<String, Object> getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans) throws BeansException {
         return getBeanFactory().getBeansOfType(type, includePrototypes, includeFactoryBeans);
     }
 
